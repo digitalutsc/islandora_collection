@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Contains islandora_collections.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function islandora_collections_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the islandora_collections module.
+    case 'help.page.islandora_collections':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Islandora Collection Views') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function islandora_collections_theme() {
+  return [
+    'islandora_collections' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function islandora_collections_page_attachments_alter(&$page){
+  $path = $current_path = \Drupal::service('path.current')->getPath();
+  if(str_contains($path, '/node')) {
+    $page['#attached']['library'][] = 'islandora_collections/collections_action';
+  }
+}
